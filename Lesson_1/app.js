@@ -1,27 +1,60 @@
-import { CalculateCircle, calculateArea } from "./circleCalculator.js";
+import {
+  calculateCircumference,
+  calculateArea,
+  calculateSphereVolume,
+} from "./circleCalculator.js";
 import { convertToNumber } from "./validation.js";
-document.querySelector("#submitButton").onclick = submitFunction;
-document.querySelector("#submitAreaButton").onclick = submitAreaFunction;
+import { outputToElement } from "./display.js";
 
-function submitFunction() {
-  let userRadius = convertToNumber(document.getElementById("radius").value);
-  let outputElement = document.getElementById("output");
-  if (userRadius) {
-    let circumfrence = CalculateCircle(userRadius);
-    outputElement.innerHTML = `The circumfrence is ${circumfrence}`;
-  } else {
-    outputElement.innerHTML = "Please enter a valid input";
+// can't use onclick on the button because modules create their own scope
+document.querySelector("#submitButton").addEventListener(
+  "click",
+  function () {
+    submitFunction("circumference");
+  },
+  false
+);
+document.querySelector("#submitButtonArea").addEventListener(
+  "click",
+  function () {
+    submitFunction("area");
+  },
+  false
+);
+document.querySelector("#submitButtonVolume").addEventListener(
+  "click",
+  function () {
+    submitFunction("volume");
+  },
+  false
+);
+
+function submitFunction(calculationToMake) {
+  let outputId = "output",
+    inputId = "radius";
+  if (calculationToMake === "area") {
+    outputId += "Area";
+    inputId += "Area";
+  } else if (calculationToMake === "volume") {
+    outputId += "Volume";
+    inputId += "Volume";
   }
-}
-function submitAreaFunction() {
-  let userRadius = convertToNumber(
-    document.getElementById("radiusForArea").value
-  );
-  let outputElement = document.getElementById("output");
-  if (userRadius) {
-    let area = calculateArea(userRadius);
-    outputElement.innerHTML = `The area is ${area}`;
+  let userRadius = convertToNumber(document.getElementById(inputId).value);
+  if (!userRadius) {
+    outputToElement(outputId, "Please enter a valid number.", "red");
   } else {
-    outputElement.innerHTML = "Please enter a valid input";
+    if (calculationToMake === "area") {
+      outputToElement(outputId, `The area is ${calculateArea(userRadius)}!`);
+    } else if (calculationToMake === "volume") {
+      outputToElement(
+        outputId,
+        `The area is ${calculateSphereVolume(userRadius)}!`
+      );
+    } else {
+      outputToElement(
+        outputId,
+        `The circumference is ${calculateCircumference(userRadius)}!`
+      );
+    }
   }
 }
