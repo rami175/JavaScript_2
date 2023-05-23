@@ -6,7 +6,6 @@ import {
 import { convertToNumber } from "./validation.js";
 import { outputToElement } from "./display.js";
 
-// can't use onclick on the button because modules create their own scope
 document.querySelector("#submitButton").addEventListener(
   "click",
   function () {
